@@ -95,7 +95,20 @@ No service account or embedded keys are needed; each user’s token is obtained 
 
 ---
 
-## Loading the extension
+## Sharing with colleagues (no setup for them)
+
+To let others use the extension without OAuth or key setup:
+
+1. **You (once):** In Chrome go to `chrome://extensions` → **Developer mode** → **Pack extension**. Choose the `packgenerator` folder as the extension root; leave “Private key” empty the first time. Chrome creates `packgenerator.crx` and `packgenerator.pem`. Keep the `.pem` safe for future updates.
+2. **You:** In Google Cloud, create one OAuth client (Chrome app) and set its **Application ID** to the extension ID shown for the packed extension in `chrome://extensions`. Put that client’s **Client ID** in `manifest.json` (see OAuth setup above), then pack again (using the same `.pem` so the ID doesn’t change).
+3. **Share:** Send colleagues the **`.crx` file** (e.g. by email or shared drive).
+4. **They do:** Open `chrome://extensions`, turn on **Developer mode**, drag the `.crx` onto the page. Done. They’ll be prompted to sign in with Google the first time they generate a pack; no other setup.
+
+Everyone who installs the same `.crx` gets the same extension ID, so your single OAuth client works for all of them.
+
+---
+
+## Loading the extension (for development)
 
 1. Open Chrome → `chrome://extensions`.
 2. Enable **Developer mode**.

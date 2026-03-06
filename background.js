@@ -272,7 +272,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     })
     .then(function (pdfBytes) {
       var base64 = arrayBufferToBase64(pdfBytes);
-      var filename = (pack === 'tech' ? 'tech-pack' : 'sales-pack') + '.pdf';
+      var safe = function (s) {
+        return (s || '').replace(/[/\\:*?"<>|]/g, '').trim().slice(0, 100) || 'Unknown';
+      };
+      var packLabel = pack === 'tech' ? 'Tech Pack' : 'Sales Pack';
+      var quotation = safe(quote.rqReference);
+      var customer = safe(quote.projectName || quote.companyName);
+      var filename = packLabel + ' - ' + quotation + ' - ' + customer + '.pdf';
       chrome.downloads.download({
         url: 'data:application/pdf;base64,' + base64,
         filename: filename,
