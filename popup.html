@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document Compiler</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="header">
+    <img src="assets/logo.png" alt="Rako" class="logo">
+    <h1 class="title">Document Compiler</h1>
+  </header>
+
+  <main class="main">
+    <p class="hint">Open a quotation at staff.rakocontrols.com, then click below to load it.</p>
+    <button type="button" class="btn btn-primary" id="loadQuote">Load current quotation</button>
+
+    <div id="quoteSection" class="quote-section hidden">
+      <div class="quote-meta">
+        <div class="meta-row"><span class="meta-label">Company</span><span id="companyName" class="meta-value"></span></div>
+        <div class="meta-row"><span class="meta-label">RQ reference</span><span id="rqRef" class="meta-value"></span></div>
+        <div class="meta-row"><span class="meta-label">Date</span><span id="quoteDate" class="meta-value"></span></div>
+      </div>
+      <div class="table-wrap">
+        <table class="quote-table">
+          <thead>
+            <tr><th>Product</th><th>Qty</th><th>Cost</th><th>Total</th></tr>
+          </thead>
+          <tbody id="quoteLines"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-pack" id="salesPack">Generate sales pack</button>
+        <button type="button" class="btn btn-pack" id="techPack">Generate tech pack</button>
+      </div>
+    </div>
+
+    <div id="message" class="message hidden"></div>
+    <div id="loading" class="loading hidden">Working…</div>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>

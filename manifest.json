@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Document Compiler",
+  "version": "1.0.0",
+  "description": "Compile sales and tech packs from Odoo quotes and Google Drive documents.",
+  "permissions": [
+    "identity",
+    "activeTab",
+    "storage",
+    "downloads"
+  ],
+  "host_permissions": [
+    "https://staff.rakocontrols.com/*",
+    "https://www.googleapis.com/*",
+    "https://docs.google.com/feeds/*",
+    "https://drive.google.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/logo.png",
+      "48": "assets/logo.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://staff.rakocontrols.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "oauth2": {
+    "client_id": "323299090620-co72lspv3c0nqk97ju7561tr808sap2k.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.readonly",
+      "https://www.googleapis.com/auth/drive.file",
+      "https://www.googleapis.com/auth/documents"
+    ]
+  }
+}
