@@ -14,6 +14,7 @@
   const techPackBtn = document.getElementById('techPack');
   const messageEl = document.getElementById('message');
   const loadingEl = document.getElementById('loading');
+  const loadingTextEl = document.getElementById('loadingText');
 
   function showMessage(text, type) {
     messageEl.textContent = text;
@@ -25,8 +26,16 @@
     messageEl.classList.add('hidden');
   }
 
-  function setLoading(on) {
-    loadingEl.classList.toggle('hidden', !on);
+  function setLoading(on, text) {
+    if (!loadingEl) return;
+    if (on) {
+      loadingEl.classList.remove('hidden');
+      if (loadingTextEl) {
+        loadingTextEl.textContent = text || 'Preparing documents…';
+      }
+    } else {
+      loadingEl.classList.add('hidden');
+    }
   }
 
   function renderQuote(data) {
@@ -98,7 +107,7 @@
         return;
       }
       salesPackBtn.disabled = true;
-      setLoading(true);
+      setLoading(true, 'Gathering sales documents from Drive…');
       chrome.runtime.sendMessage({
         type: 'GENERATE_PACK',
         pack: 'sales',
@@ -128,7 +137,7 @@
         return;
       }
       techPackBtn.disabled = true;
-      setLoading(true);
+      setLoading(true, 'Gathering datasheets and building tech pack…');
       chrome.runtime.sendMessage({
         type: 'GENERATE_PACK',
         pack: 'tech',
