@@ -1,5 +1,6 @@
 {
   "manifest_version": 3,
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvQfjMw8+ZKUn3cLRaenHLIBaOZPjSWIYD+fGUklHniRN7wZXIx+D84XQnEKI7hJkuWBpz2fLiFmyjmezeLxKZPDkHsHlXpidkreFeIBRBWDI/YtEFa1mNdWkTlWx4/IhXDOk3kyGr7Rd1+pqdCeCqXJUsDEaQWP74JyALxqpewWRMhlmRGLgFZUlIX91pMWdmOTYuXqzZkR5bMUVUQ3BAdWXf3zrgrjq5l/gVvje6NMw6YoYFQX6kRKiDn8QQl15OCN1GDY65hPutGx05O7C5aLULsKghXIcQmoKuDO8HxYSR+QP2vncDkZLcouDqVaDAi2zDV4ftx6rqMkl4fs1FwIDAQAB",
   "name": "Document Compiler",
   "version": "1.0.0",
   "description": "Compile sales and tech packs from Odoo quotes and Google Drive documents.",

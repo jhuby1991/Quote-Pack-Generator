@@ -95,9 +95,28 @@ No service account or embedded keys are needed; each user’s token is obtained 
 
 ---
 
-## Sharing with colleagues (no setup for them)
+## Same extension ID when everyone loads unpacked
 
-To let others use the extension without OAuth or key setup:
+If you want colleagues to **Load unpacked** (no .crx, no store) and still all get the **same extension ID** (so one OAuth client works):
+
+1. **You (once):** Pack the extension in Chrome (`chrome://extensions` → **Pack extension** → choose the `packgenerator` folder). Chrome creates a `.pem` file; keep it.
+2. **You:** Run the script to get the public key as one line:
+   ```bash
+   chmod +x scripts/get-key.sh
+   ./scripts/get-key.sh path/to/packgenerator.pem
+   ```
+   (Use the real path to your `.pem`, e.g. `../packgenerator.pem` if it's next to the project folder.)
+3. **You:** Copy the **entire** line of output. In `manifest.json`, replace `PASTE_KEY_HERE` (in the `"key"` field) with that line. Save.
+4. **You:** In Google Cloud, create one OAuth client (Chrome app) and set **Application ID** to the extension ID you see in `chrome://extensions` when this folder is loaded unpacked. Put that client's **Client ID** in `manifest.json` (see OAuth setup above).
+5. **Share:** Give colleagues the **folder** (zip it or use a shared drive). They **Load unpacked** and select that folder. Everyone gets the same ID; no store, no .crx.
+
+The script prints the key as a single line so pasting into the manifest doesn't break JSON.
+
+---
+
+## Sharing with colleagues (using .crx)
+
+To let others use the extension without loading unpacked:
 
 1. **You (once):** In Chrome go to `chrome://extensions` → **Developer mode** → **Pack extension**. Choose the `packgenerator` folder as the extension root; leave “Private key” empty the first time. Chrome creates `packgenerator.crx` and `packgenerator.pem`. Keep the `.pem` safe for future updates.
 2. **You:** In Google Cloud, create one OAuth client (Chrome app) and set its **Application ID** to the extension ID shown for the packed extension in `chrome://extensions`. Put that client’s **Client ID** in `manifest.json` (see OAuth setup above), then pack again (using the same `.pem` so the ID doesn’t change).

@@ -32,7 +32,63 @@
       </div>
       <div class="actions">
         <button type="button" class="btn btn-pack" id="salesPack">Generate sales pack</button>
+        <button type="button" class="btn btn-pack" id="orderPack">Order the pack</button>
         <button type="button" class="btn btn-pack" id="techPack">Generate tech pack</button>
+      </div>
+    </div>
+
+    <div id="orderSection" class="order-section hidden">
+      <div class="order-heading">Configure &amp; order</div>
+      <div class="order-options">
+        <label class="opt-row"><input type="checkbox" id="opt1"> Company info</label>
+        <div class="opt-row">
+          <span class="opt-label">Sector</span>
+          <select id="opt2">
+            <option value="">—</option>
+            <option value="Residential">Residential</option>
+            <option value="Commercial">Commercial</option>
+            <option value="Hotel">Hotel</option>
+          </select>
+        </div>
+        <div class="opt-row">
+          <span class="opt-label">Hardware</span>
+          <select id="opt3">
+            <option value="">—</option>
+            <option value="RAK8">RAK8</option>
+            <option value="DIN">DIN</option>
+            <option value="Wireless">Wireless</option>
+          </select>
+        </div>
+        <div class="opt-row">
+          <span class="opt-label">Keypad</span>
+          <select id="opt4">
+            <option value="">—</option>
+            <option value="ALL Options">ALL Options</option>
+            <option value="MOD">MOD</option>
+            <option value="EOS">EOS</option>
+            <option value="CLASSIC">CLASSIC</option>
+            <option value="3RD PARTY">3RD PARTY</option>
+          </select>
+        </div>
+        <div class="opt-row">
+          <span class="opt-label">Application</span>
+          <select id="opt5">
+            <option value="">—</option>
+            <option value="Homeowner">Homeowner</option>
+            <option value="Professional">Professional</option>
+          </select>
+        </div>
+        <div class="opt-row opt-checkboxes">
+          <span class="opt-label">Additional</span>
+          <label><input type="checkbox" id="opt6a" value="Integration"> Integration</label>
+          <label><input type="checkbox" id="opt6b" value="Supp. Products"> Supp. Products</label>
+        </div>
+      </div>
+      <p class="order-hint">Drag to reorder. Files will be fetched in this order.</p>
+      <ul id="orderList" class="order-list" aria-label="Pack order"></ul>
+      <div class="order-actions">
+        <button type="button" class="btn btn-primary" id="generateFromOrder">Generate sales pack</button>
+        <button type="button" class="btn btn-ghost" id="closeOrder">Close</button>
       </div>
     </div>
 
@@ -45,6 +101,7 @@
     </div>
   </main>
 
+  <script src="sales-pack-mapping.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

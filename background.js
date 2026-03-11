@@ -114,6 +114,23 @@ function deleteFile(token, fileId) {
   return driveFetch(token, '/files/' + fileId + '?supportsAllDrives=true', { method: 'DELETE' });
 }
 
+function findFileByFilename(files, requestedName) {
+  var base = (requestedName || '').replace(/\.[^.]*$/, '').trim().toLowerCase();
+  var docOrPdf = files.filter(function (f) {
+    return f.mimeType === 'application/vnd.google-apps.document' || f.mimeType === 'application/pdf';
+  });
+  var exact = docOrPdf.find(function (f) {
+    var n = (f.name || '').replace(/\.[^.]*$/, '').trim().toLowerCase();
+    return n === base;
+  });
+  if (exact) return exact;
+  var partial = docOrPdf.find(function (f) {
+    var n = (f.name || '').toLowerCase();
+    return n.indexOf(base) !== -1 || base.indexOf(n.replace(/\.[^.]*$/, '').trim()) !== -1;
+  });
+  return partial || null;
+}
+
 function matchProductFile(files, normalizedName) {
   const docs = files.filter(function (f) { return f.mimeType === 'application/vnd.google-apps.document'; });
   const normalized = (normalizedName || '').toLowerCase();
@@ -185,6 +202,41 @@ function buildSalesPack(token, folderId, quote) {
           });
       });
     });
+}
+
+function buildSalesPackOrdered(token, folderId, quote, orderedFilenames) {
+  var projectName = quote.projectName || quote.companyName || '';
+  var rakoQuote = quote.rqReference || '';
+  var coverPrefix = '01_cover_dynamic';
+
+  return listFiles(token, folderId).then(function (files) {
+    var chain = Promise.resolve([]);
+    orderedFilenames.forEach(function (filename) {
+      var base = (filename || '').replace(/\.[^.]*$/, '').trim().toLowerCase();
+      var isCover = base === coverPrefix || base.indexOf('01_cover') === 0;
+      chain = chain.then(function (acc) {
+        var file = findFileByFilename(files, filename);
+        if (!file) return Promise.reject(new Error('File not found in Drive: ' + filename));
+        if (isCover && file.mimeType === 'application/vnd.google-apps.document') {
+          return copyFile(token, file.id, 'Document Compiler cover').then(function (copyId) {
+            return replacePlaceholders(token, copyId, projectName, rakoQuote)
+              .then(function () { return exportPdf(token, copyId); })
+              .then(function (pdfBytes) {
+                return deleteFile(token, copyId).catch(function () {})
+                  .then(function () { return acc.concat([pdfBytes]); });
+              });
+          });
+        }
+        return getFileContentAsPdf(token, file).then(function (pdfBytes) {
+          return acc.concat([pdfBytes]);
+        });
+      });
+    });
+    return chain.then(function (buffers) {
+      if (buffers.length === 0) return Promise.reject(new Error('No files to merge.'));
+      return mergePdfs(buffers);
+    });
+  });
 }
 
 function buildTechPack(token, folderId, quote) {
@@ -268,6 +320,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   getAuthToken()
     .then(function (token) {
       if (pack === 'tech') return buildTechPack(token, driveFolderId, quote);
+      if (request.orderedFilenames && request.orderedFilenames.length > 0) {
+        return buildSalesPackOrdered(token, driveFolderId, quote, request.orderedFilenames);
+      }
       return buildSalesPack(token, driveFolderId, quote);
     })
     .then(function (pdfBytes) {
